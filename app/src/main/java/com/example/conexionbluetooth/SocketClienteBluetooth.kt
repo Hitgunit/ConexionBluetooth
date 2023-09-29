@@ -29,6 +29,7 @@ class SocketClienteBluetooth(var context:Context,
 
     var btSocketCliente:BluetoothSocket?=null
 
+    val movimientoLocal = (context as MainActivity).eleccionJugador
 
 
     override fun onPreExecute() {
@@ -102,8 +103,15 @@ class SocketClienteBluetooth(var context:Context,
         }
 
         if(values[0]==0){
-            mensaje.text=buffer!!.toString()
+            val movimientoRemoto = buffer!!.toString()
+            if (movimientoRemoto in listOf("piedra", "papel", "tijera")) {
+                val resultado = (context as MainActivity).determinarGanador(movimientoLocal, movimientoRemoto)
+                mensaje.text = resultado.toString()
+            } else {
+                mensaje.text = movimientoRemoto
+            }
         }
+
 
         super.onProgressUpdate(*values)
     }

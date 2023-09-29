@@ -21,11 +21,14 @@ class MainActivity : AppCompatActivity() {
     var btnListar: Button? = null
     var btnEnviar: Button? = null
     var listView: ListView? = null
-    var txtMensaje: TextView? = null
+    var txtResultado: TextView? = null
     var txtStatus: TextView? = null
     var txtMsg: EditText? = null
     var socketAux: BluetoothServerSocket? = null
     var SocketCliente: BluetoothSocket? = null
+    lateinit var btnPiedra: Button
+    lateinit var btnPapel: Button
+    lateinit var btnTijera: Button
     private var myBluetoothAdapter: BluetoothAdapter? = null
     lateinit var n_pairedDevice: Set<BluetoothDevice>
     val APP_NAME = "BTChat"
@@ -33,6 +36,10 @@ class MainActivity : AppCompatActivity() {
     var conectarCliente: SocketClienteBluetooth? = null
     var REQUEST_ENABLE_BLUETOOTH = 1
     private val PERMISSIONS_REQUEST_CODE = 1001
+    var escuchar: SocketServidorBluetooth? = null
+    var eleccionJugador: String = ""
+
+
 
 
     var servidor: Boolean = false
@@ -112,18 +119,18 @@ class MainActivity : AppCompatActivity() {
                 SocketCliente = device.createRfcommSocketToServiceRecord(myUUID)
 
                 conectarCliente =
-                    SocketClienteBluetooth(this, txtStatus!!, device, SocketCliente!!, txtMensaje!!)
+                    SocketClienteBluetooth(this, txtStatus!!, device, SocketCliente!!, txtResultado!!)
                 conectarCliente!!.execute()
 
                 txtStatus!!.text = "Conectando..."
             }
 
         }
-        var escuchar =SocketServidorBluetooth(this, txtStatus!!,myBluetoothAdapter!!,socketAux!!,txtMsg!!,txtMensaje!!)
+        escuchar =SocketServidorBluetooth(this, txtStatus!!,myBluetoothAdapter!!,socketAux!!,txtMsg!!,txtResultado!!)
 
         btnEscuchar!!.setOnClickListener {
 
-            escuchar.execute()
+            escuchar!!.execute()
             servidor = true
         }
         btnEnviar!!.setOnClickListener {
@@ -133,6 +140,27 @@ class MainActivity : AppCompatActivity() {
                 conectarCliente!!.enviar(txtMsg!!.text.toString())
             }
         }
+        btnPiedra!!.setOnClickListener {
+            eleccionJugador = "piedra"
+            enviarMovimiento("piedra")
+        }
+        btnPapel!!.setOnClickListener {
+            eleccionJugador = "papel"
+            enviarMovimiento("papel")
+        }
+        btnTijera!!.setOnClickListener {
+            eleccionJugador = "tijera"
+            enviarMovimiento("tijera")
+        }
+    }
+
+    private fun enviarMovimiento(movimiento: String) {
+        // Aquí puedes llamar al método de enviar mensaje del servidor o cliente según sea necesario
+        if(servidor){
+            escuchar?.enviar(movimiento)
+        } else {
+            conectarCliente?.enviar(movimiento)
+        }
     }
 
 
@@ -141,9 +169,13 @@ class MainActivity : AppCompatActivity() {
         btnListar=findViewById(R.id.btnListaDispositivos)
         btnEnviar=findViewById(R.id.btnEnviar)
         listView=findViewById(R.id.IsView)
-        txtMensaje=findViewById(R.id.txtMensaje)
+        txtResultado=findViewById(R.id.txtResultado)
         txtStatus=findViewById(R.id.txtStatus)
         txtMsg=findViewById(R.id.txtMsg)
+        btnPapel = findViewById(R.id.btnPapel)
+        btnPiedra = findViewById(R.id.btnPiedra)
+        btnTijera = findViewById(R.id.btnTijera)
+
     }
 
     private fun hasAllPermissions(): Boolean {
@@ -180,6 +212,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun determinarGanador(movimientoLocal: String, movimientoRemoto: String) {
+        val resultado: String = when {
+            movimientoLocal == movimientoRemoto -> "Empate!"
+            movimientoLocal == "piedra" && movimientoRemoto == "tijera" -> "¡Ganaste!"
+            movimientoLocal == "piedra" && movimientoRemoto == "papel" -> "¡Perdiste!"
+            movimientoLocal == "papel" && movimientoRemoto == "piedra" -> "¡Ganaste!"
+            movimientoLocal == "papel" && movimientoRemoto == "tijera" -> "¡Perdiste!"
+            movimientoLocal == "tijera" && movimientoRemoto == "papel" -> "¡Ganaste!"
+            movimientoLocal == "tijera" && movimientoRemoto == "piedra" -> "¡Perdiste!"
+            else -> "Movimiento no válido"
+        }
+
+        // Ahora, vamos a actualizar el TextView con el resultado
+        txtResultado?.text = resultado
+    }
+
+
 
 
 }
