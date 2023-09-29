@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     var btnEscuchar: Button? = null
     var btnListar: Button? = null
-    var btnEnviar: Button? = null
+    var btnNew: Button? = null
     var listView: ListView? = null
     var txtResultado: TextView? = null
     var txtStatus: TextView? = null
@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         relacionarObjetos()
-
         myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
         if (!hasAllPermissions()) {
@@ -78,6 +77,7 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(enableBluetoothIntent, REQUEST_ENABLE_BLUETOOTH)
             Toast.makeText(this, "Bluetooth Habilitado", Toast.LENGTH_LONG).show()
         }
+
 
         implementarListeners()
 
@@ -133,27 +133,36 @@ class MainActivity : AppCompatActivity() {
             escuchar!!.execute()
             servidor = true
         }
-        //btnEnviar!!.setOnClickListener {
-          //  if(servidor){
-            //    escuchar!!.enviar(txtMsg!!.text.toString())
-            //}else{
-              //  conectarCliente!!.enviar(txtMsg!!.text.toString())
-            //}
-        //}
+        btnNew!!.setOnClickListener {
+            movimientoLocal = ""
+            txtResultado!!.text = ""
+            btnPapel.isEnabled = true
+            btnTijera.isEnabled = true
+            btnPiedra.isEnabled = true
+
+        }
         btnPiedra!!.setOnClickListener {
             movimientoLocal = "piedra"
             enviarMovimiento("piedra")
+            bloquear()
         }
         btnPapel!!.setOnClickListener {
             movimientoLocal = "papel"
             enviarMovimiento("papel")
+            bloquear()
         }
         btnTijera!!.setOnClickListener {
             movimientoLocal = "tijera"
             enviarMovimiento("tijera")
+            bloquear()
         }
     }
 
+    fun bloquear(){
+        btnPapel.isEnabled = false
+        btnTijera.isEnabled = false
+        btnPiedra.isEnabled = false
+    }
     private fun enviarMovimiento(movimiento: String) {
         // Aquí puedes llamar al método de enviar mensaje del servidor o cliente según sea necesario
         if(servidor){
@@ -167,7 +176,7 @@ class MainActivity : AppCompatActivity() {
     private fun relacionarObjetos() {
         btnEscuchar=findViewById(R.id.btnEscuchar)
         btnListar=findViewById(R.id.btnListaDispositivos)
-        btnEnviar=findViewById(R.id.btnEnviar)
+        btnNew=findViewById(R.id.btnNew)
         listView=findViewById(R.id.IsView)
         txtResultado=findViewById(R.id.txtResultado)
         txtStatus=findViewById(R.id.txtStatus)
@@ -214,7 +223,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun determinarGanador(movimientoRemoto: String): String {
-        return when {
+        val resultado: String = when {
             movimientoLocal == movimientoRemoto -> "Empate!"
             movimientoLocal == "piedra" && movimientoRemoto == "tijera" -> "¡Ganaste!"
             movimientoLocal == "piedra" && movimientoRemoto == "papel" -> "¡Perdiste!"
@@ -222,9 +231,14 @@ class MainActivity : AppCompatActivity() {
             movimientoLocal == "papel" && movimientoRemoto == "tijera" -> "¡Perdiste!"
             movimientoLocal == "tijera" && movimientoRemoto == "papel" -> "¡Ganaste!"
             movimientoLocal == "tijera" && movimientoRemoto == "piedra" -> "¡Perdiste!"
-            else -> "Movimiento no válido"
+            else -> "......."
         }
+        return resultado
+
     }
+
+
+
 
 
 

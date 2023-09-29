@@ -70,6 +70,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="Escribir"
+            android:visibility="gone"
             android:inputType="textPersonName"/>
 
         <LinearLayout
@@ -101,11 +102,11 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnEnviar"
+            android:id="@+id/btnNew"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Enviar"/>
+            android:text="Nuevo juego"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
