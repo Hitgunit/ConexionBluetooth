@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     var REQUEST_ENABLE_BLUETOOTH = 1
     private val PERMISSIONS_REQUEST_CODE = 1001
     var escuchar: SocketServidorBluetooth? = null
-    var eleccionJugador: String = ""
+    var movimientoLocal: String = ""
 
 
 
@@ -133,23 +133,23 @@ class MainActivity : AppCompatActivity() {
             escuchar!!.execute()
             servidor = true
         }
-        btnEnviar!!.setOnClickListener {
-            if(servidor){
-                escuchar!!.enviar(txtMsg!!.text.toString())
-            }else{
-                conectarCliente!!.enviar(txtMsg!!.text.toString())
-            }
-        }
+        //btnEnviar!!.setOnClickListener {
+          //  if(servidor){
+            //    escuchar!!.enviar(txtMsg!!.text.toString())
+            //}else{
+              //  conectarCliente!!.enviar(txtMsg!!.text.toString())
+            //}
+        //}
         btnPiedra!!.setOnClickListener {
-            eleccionJugador = "piedra"
+            movimientoLocal = "piedra"
             enviarMovimiento("piedra")
         }
         btnPapel!!.setOnClickListener {
-            eleccionJugador = "papel"
+            movimientoLocal = "papel"
             enviarMovimiento("papel")
         }
         btnTijera!!.setOnClickListener {
-            eleccionJugador = "tijera"
+            movimientoLocal = "tijera"
             enviarMovimiento("tijera")
         }
     }
@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun determinarGanador(movimientoLocal: String, movimientoRemoto: String) {
+    fun determinarGanador(movimientoRemoto: String) {
         val resultado: String = when {
             movimientoLocal == movimientoRemoto -> "Empate!"
             movimientoLocal == "piedra" && movimientoRemoto == "tijera" -> "¡Ganaste!"

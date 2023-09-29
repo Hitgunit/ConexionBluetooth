@@ -26,7 +26,7 @@ class SocketServidorBluetooth(var context: Context,
     //Variable para el mensaje
     var buffer: String?=null
 
-    val movimientoLocal = (context as MainActivity).eleccionJugador
+    val movimientoLocal = (context as MainActivity).movimientoLocal
 
 
     var btServerSocket:BluetoothServerSocket?=null
@@ -102,10 +102,10 @@ class SocketServidorBluetooth(var context: Context,
         if(values[0]==0){
             val movimientoRemoto = buffer!!.toString()
             if (movimientoRemoto in listOf("piedra", "papel", "tijera")) {
-                val resultado = (context as MainActivity).determinarGanador(movimientoLocal, movimientoRemoto)
-                txtMensaje.text = resultado.toString()
+                val resultado = (context as MainActivity).determinarGanador(movimientoRemoto)
+                //txtMensaje.text = resultado.toString()
             } else {
-                txtMensaje.text = movimientoRemoto
+                //txtMensaje.text = movimientoRemoto
             }
         }
 
