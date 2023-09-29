@@ -106,9 +106,9 @@ class SocketClienteBluetooth(var context:Context,
             val movimientoRemoto = buffer!!.toString()
             if (movimientoRemoto in listOf("piedra", "papel", "tijera")) {
                 val resultado = (context as MainActivity).determinarGanador(movimientoRemoto)
-                //mensaje.text = resultado.toString()
+                mensaje.text = resultado
             } else {
-                //mensaje.text = movimientoRemoto
+                mensaje.text = movimientoRemoto
             }
         }
 

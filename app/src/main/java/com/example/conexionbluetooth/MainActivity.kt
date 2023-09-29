@@ -213,8 +213,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun determinarGanador(movimientoRemoto: String) {
-        val resultado: String = when {
+    fun determinarGanador(movimientoRemoto: String): String {
+        return when {
             movimientoLocal == movimientoRemoto -> "Empate!"
             movimientoLocal == "piedra" && movimientoRemoto == "tijera" -> "¡Ganaste!"
             movimientoLocal == "piedra" && movimientoRemoto == "papel" -> "¡Perdiste!"
@@ -224,10 +224,8 @@ class MainActivity : AppCompatActivity() {
             movimientoLocal == "tijera" && movimientoRemoto == "piedra" -> "¡Perdiste!"
             else -> "Movimiento no válido"
         }
-
-        // Ahora, vamos a actualizar el TextView con el resultado
-        txtResultado?.text = resultado
     }
+
 
 
 
